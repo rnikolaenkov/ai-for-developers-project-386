@@ -1,0 +1,13 @@
+{
+  "name": "ai-for-developers-project",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "spec:build": "tsp compile ."
+  },
+  "devDependencies": {
+    "@typespec/compiler": "latest",
+    "@typespec/http": "latest",
+    "@typespec/openapi3": "latest"
+  }
+}
