@@ -1,5 +1,9 @@
 import Fastify, { type FastifyInstance } from "fastify";
 import cors from "@fastify/cors";
+import fastifyStatic from "@fastify/static";
+import { existsSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { AppError } from "./domain/errors.js";
 import { BookingService, type BookingServiceOptions } from "./domain/bookingService.js";
 import { registerAdminRoutes } from "./routes/admin.js";
@@ -15,10 +19,19 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<FastifyIn
   const app = Fastify();
   const store = options.store ?? new MemoryStore();
   const service = new BookingService({ store, now: options.now });
+  const frontendDistDir = getFrontendDistDir();
+  const hasFrontendDist = existsSync(frontendDistDir);
 
   await app.register(cors, {
     origin: true,
   });
+
+  if (hasFrontendDist) {
+    await app.register(fastifyStatic, {
+      root: frontendDistDir,
+      prefix: "/",
+    });
+  }
 
   app.setErrorHandler((error, request, reply) => {
     if (error instanceof AppError) {
@@ -33,8 +46,21 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<FastifyIn
     });
   });
 
-  await registerAdminRoutes(app, service);
+  await registerAdminRoutes(app, service, hasFrontendDist);
   await registerPublicRoutes(app, service);
 
+  app.get("/healthz", async () => ({ status: "ok" }));
+
+  if (hasFrontendDist) {
+    app.get("/", async (_request, reply) => reply.sendFile("index.html"));
+    app.get("/booking", async (_request, reply) => reply.sendFile("index.html"));
+  }
+
   return app;
+}
+
+function getFrontendDistDir() {
+  const currentDir = dirname(fileURLToPath(import.meta.url));
+
+  return resolve(currentDir, "../../frontend/dist");
 }
