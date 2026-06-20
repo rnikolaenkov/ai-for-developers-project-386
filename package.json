@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "spec:build": "tsp compile ."
+    "spec:build": "tsp compile .",
+    "backend:dev": "npm --prefix backend run dev",
+    "backend:build": "npm --prefix backend run build",
+    "backend:test": "npm --prefix backend run test"
   },
   "devDependencies": {
     "@typespec/compiler": "latest",
