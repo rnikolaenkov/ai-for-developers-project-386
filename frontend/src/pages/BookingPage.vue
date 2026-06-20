@@ -46,7 +46,7 @@
               <n-text depth="3">Сначала выберите тип события сверху.</n-text>
             </div>
 
-            <div v-else class="slot-list">
+            <div v-else class="slot-list" data-testid="slot-list">
               <n-button
                 v-for="slot in availability?.slots ?? []"
                 :key="slot.startsAt"
@@ -65,24 +65,26 @@
       <n-grid-item>
         <n-card title="Create booking">
           <template v-if="createdBooking">
-            <n-result
-              status="success"
-              title="Бронирование создано"
-              description="Слот успешно закреплён за гостем."
-            >
-              <template #footer>
-                <div class="booking-summary">
-                  <n-text><strong>Событие:</strong> {{ createdBooking.eventTypeName }}</n-text>
-                  <n-text><strong>Начало:</strong> {{ formatDateTime(createdBooking.startsAt) }}</n-text>
-                  <n-text><strong>Гость:</strong> {{ createdBooking.guest.name }} ({{ createdBooking.guest.email }})</n-text>
-                  <n-button secondary @click="resetBookingState">Создать ещё одно бронирование</n-button>
-                </div>
-              </template>
-            </n-result>
+            <div data-testid="booking-success">
+              <n-result
+                status="success"
+                title="Бронирование создано"
+                description="Слот успешно закреплён за гостем."
+              >
+                <template #footer>
+                  <div class="booking-summary">
+                    <n-text><strong>Событие:</strong> {{ createdBooking.eventTypeName }}</n-text>
+                    <n-text><strong>Начало:</strong> {{ formatDateTime(createdBooking.startsAt) }}</n-text>
+                    <n-text><strong>Гость:</strong> {{ createdBooking.guest.name }} ({{ createdBooking.guest.email }})</n-text>
+                    <n-button secondary @click="resetBookingState">Создать ещё одно бронирование</n-button>
+                  </div>
+                </template>
+              </n-result>
+            </div>
           </template>
 
           <template v-else>
-            <n-form label-placement="top" @submit.prevent="submitBooking">
+            <n-form data-testid="booking-form" label-placement="top" @submit.prevent="submitBooking">
               <n-space vertical size="large">
                 <n-form-item label="Выбранный слот">
                   <n-input
@@ -99,12 +101,13 @@
                   <n-input v-model:value="bookingForm.email" placeholder="guest@example.com" />
                 </n-form-item>
 
-                <n-result
-                  v-if="bookingError"
-                  status="warning"
-                  title="Не удалось создать бронирование"
-                  :description="bookingError"
-                />
+                <div v-if="bookingError" data-testid="booking-error">
+                  <n-result
+                    status="warning"
+                    title="Не удалось создать бронирование"
+                    :description="bookingError"
+                  />
+                </div>
 
                 <n-button
                   attr-type="submit"

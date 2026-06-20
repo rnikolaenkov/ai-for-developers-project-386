@@ -21,7 +21,9 @@
       empty-text="Будущих бронирований пока нет"
       @retry="loadBookings"
     >
-      <n-data-table :columns="columns" :data="bookings" :pagination="{ pageSize: 8 }" />
+      <div data-testid="bookings-table">
+        <n-data-table :columns="columns" :data="bookings" :pagination="{ pageSize: 8 }" />
+      </div>
     </PageState>
   </section>
 </template>

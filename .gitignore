@@ -3,6 +3,7 @@ tsp-output/
 frontend/node_modules/
 frontend/dist/
 frontend/coverage/
+frontend/test-results/
 backend/node_modules/
 backend/dist/
 backend/coverage/

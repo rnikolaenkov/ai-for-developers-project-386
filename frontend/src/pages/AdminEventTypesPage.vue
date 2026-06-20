@@ -28,7 +28,7 @@
 
       <n-grid-item>
         <n-card title="Create event type">
-          <n-form label-placement="top" @submit.prevent="submitEventType">
+          <n-form data-testid="event-type-form" label-placement="top" @submit.prevent="submitEventType">
             <n-space vertical size="large">
               <n-form-item label="ID">
                 <n-input v-model:value="form.id" placeholder="strategy-session" />
@@ -43,22 +43,26 @@
               </n-form-item>
 
               <n-form-item label="Длительность, минут">
-                <n-input-number v-model:value="form.durationMinutes" :min="1" :max="1440" />
+                <div data-testid="event-type-duration">
+                  <n-input-number v-model:value="form.durationMinutes" :min="1" :max="1440" />
+                </div>
               </n-form-item>
 
-              <n-result
-                v-if="submitState === 'success'"
-                status="success"
-                title="Тип события создан"
-                description="Новый тип события добавлен в список."
-              />
+              <div v-if="submitState === 'success'" data-testid="event-type-success">
+                <n-result
+                  status="success"
+                  title="Тип события создан"
+                  description="Новый тип события добавлен в список."
+                />
+              </div>
 
-              <n-result
-                v-if="submitError"
-                status="warning"
-                title="Не удалось создать тип события"
-                :description="submitError"
-              />
+              <div v-if="submitError" data-testid="event-type-error">
+                <n-result
+                  status="warning"
+                  title="Не удалось создать тип события"
+                  :description="submitError"
+                />
+              </div>
 
               <n-button
                 attr-type="submit"
