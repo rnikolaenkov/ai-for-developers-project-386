@@ -1,4 +1,7 @@
+ai-for-developers-project-386-production-9a32.up.railway.app
+
 ### Hexlet tests and linter status:
+
 [![Actions Status](https://github.com/rnikolaenkov/ai-for-developers-project-386/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/rnikolaenkov/ai-for-developers-project-386/actions)
 
 ## Automation
