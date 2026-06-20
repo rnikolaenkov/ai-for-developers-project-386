@@ -44,7 +44,7 @@
 
               <n-form-item label="Длительность, минут">
                 <div data-testid="event-type-duration">
-                  <n-input-number v-model:value="form.durationMinutes" :min="1" :max="1440" />
+                  <n-input-number v-model:value="form.durationMinutes" :min="1" :max="1440" :step="10" />
                 </div>
               </n-form-item>
 
