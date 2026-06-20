@@ -122,4 +122,16 @@ describe("backend routes", () => {
       code: "validation_error",
     });
   });
+
+  it("exposes a health check endpoint", async () => {
+    const app = await appPromise;
+
+    const health = await app.inject({
+      method: "GET",
+      url: "/healthz",
+    });
+
+    expect(health.statusCode).toBe(200);
+    expect(health.json()).toEqual({ status: "ok" });
+  });
 });

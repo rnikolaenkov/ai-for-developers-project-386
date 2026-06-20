@@ -49,7 +49,7 @@ describe("api client", () => {
     await api.getAvailability("demo", "2026-06-20T10:00:00.000Z", 7);
 
     expect(fetchSpy).toHaveBeenCalledWith(
-      "http://localhost:3000/event-types/demo/availability?from=2026-06-20T10%3A00%3A00.000Z&days=7",
+      `${window.location.origin}/event-types/demo/availability?from=2026-06-20T10%3A00%3A00.000Z&days=7`,
       expect.any(Object),
     );
   });

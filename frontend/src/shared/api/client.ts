@@ -8,7 +8,21 @@ import type {
   UiApiError,
 } from "./types";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000";
+const API_BASE_URL = resolveApiBaseUrl();
+
+function resolveApiBaseUrl() {
+  const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+
+  if (configuredBaseUrl) {
+    return configuredBaseUrl;
+  }
+
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+
+  return "http://localhost:3000";
+}
 
 export class ApiClientError extends Error {
   statusCode: number;
@@ -59,6 +73,7 @@ export function normalizeApiError(response: Response, payload: unknown): UiApiEr
 export async function request<T>(path: string, init?: RequestInit, query?: Record<string, string | number | undefined>): Promise<T> {
   const response = await fetch(buildUrl(path, query), {
     headers: {
+      Accept: "application/json",
       "Content-Type": "application/json",
       ...(init?.headers ?? {}),
     },

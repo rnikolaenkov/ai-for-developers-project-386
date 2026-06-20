@@ -38,3 +38,42 @@ For correct changelog generation and semantic version suggestions, merged commit
 npm install
 npm run spec:build
 ```
+
+## Docker
+
+Приложение собирается в один Docker-образ: Fastify обслуживает API и раздает собранный Vue SPA.
+
+Локальная сборка образа:
+
+```bash
+docker build -t calendar-booking-app .
+```
+
+Локальный запуск контейнера:
+
+```bash
+docker run --rm -p 3000:3000 -e PORT=3000 calendar-booking-app
+```
+
+После запуска приложение будет доступно на `http://localhost:3000/booking`, а healthcheck на `http://localhost:3000/healthz`.
+
+### Переменные окружения
+
+- `PORT` — порт HTTP-сервера. В Railway подставляется автоматически.
+- `HOST` — хост Fastify. По умолчанию `0.0.0.0`.
+- `NOW` — опциональная фиксированная дата/время для детерминированного запуска и тестов.
+- `VITE_API_BASE_URL` — опциональный URL API для frontend build. Если не задан, frontend использует same-origin.
+
+## Railway
+
+Проект подготовлен для деплоя как одного сервиса через Dockerfile и `railway.json`.
+
+Шаги настройки:
+
+1. Подключить GitHub-репозиторий к Railway.
+2. Создать новый service из репозитория.
+3. Убедиться, что Railway использует Dockerfile из корня репозитория.
+4. При необходимости задать переменные окружения (`NOW` опционально; `PORT` Railway задает сам).
+5. Дождаться первого deploy и проверить `https://<railway-domain>/healthz`.
+
+После деплоя frontend и backend будут доступны с одного домена, поэтому отдельная настройка `VITE_API_BASE_URL` для production не требуется.
